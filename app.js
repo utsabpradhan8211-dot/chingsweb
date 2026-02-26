@@ -395,6 +395,14 @@ refs.logoutButton.addEventListener("click", () => {
 refs.authCancel.addEventListener("click", () => refs.authModal.close());
 refs.checkoutCancel.addEventListener("click", () => refs.checkoutModal.close());
 
+[refs.authModal, refs.checkoutModal, refs.paymentModal].forEach((modal) => {
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      modal.close();
+    }
+  });
+});
+
 refs.authForm.addEventListener("submit", (event) => {
   event.preventDefault();
   state.user = document.getElementById("authEmail").value;
