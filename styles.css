@@ -56,6 +56,13 @@ body {
 
 button, select, input, textarea {
   font: inherit; border-radius: 10px; border: 1px solid var(--line); padding: .6rem .8rem;
+  background: var(--card);
+  color: var(--text);
+}
+
+select option {
+  background: var(--card);
+  color: var(--text);
 }
 button { cursor: pointer; }
 button.solid { background: var(--accent); color: #fff; border-color: transparent; }
