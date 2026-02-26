@@ -62,6 +62,7 @@ const state = {
   user: null,
   trackingTimer: null,
   theme: "light",
+  activeOrder: null,
 };
 
 const refs = {
@@ -94,6 +95,7 @@ const refs = {
   viewTracking: document.getElementById("viewTracking"),
   timeline: document.getElementById("trackingTimeline"),
   trackingSection: document.getElementById("trackingSection"),
+  trackingMeta: document.getElementById("trackingMeta"),
   themeToggle: document.getElementById("themeToggle"),
 };
 
@@ -236,6 +238,10 @@ function finalizeOrder(paymentId) {
   appendPaymentLog(`Received payment id ${paymentId}.`);
   appendPaymentLog("Sent confirmation to kitchen and delivery partner.");
   refs.closePayment.disabled = false;
+  state.activeOrder = {
+    id: `ORD-${Math.floor(Math.random() * 90000 + 10000)}`,
+    placedAt: Date.now(),
+  };
   setupTracking();
   state.cart.clear();
   renderCart();
@@ -302,28 +308,48 @@ function launchRazorpay(orderDetails) {
 }
 
 function setupTracking() {
+  if (!state.activeOrder) return;
+
   const checkpoints = [
-    "Order confirmed by Seoul Spice kitchen",
-    "Chef started preparing your meal",
-    "Packaging in progress",
-    "Rider picked up order",
-    "Rider is nearby (ETA: 6 mins)",
-    "Delivered. Enjoy your meal!",
+    { offsetMs: 0, text: "Order confirmed" },
+    { offsetMs: 120000, text: "Kitchen started preparing" },
+    { offsetMs: 300000, text: "Packed and ready for pickup" },
+    { offsetMs: 480000, text: "Rider picked up your order" },
+    { offsetMs: 720000, text: "Rider is nearby" },
+    { offsetMs: 900000, text: "Delivered" },
   ];
 
-  refs.timeline.innerHTML = "";
+  const renderTracking = () => {
+    const elapsed = Date.now() - state.activeOrder.placedAt;
+    refs.timeline.innerHTML = "";
+
+    checkpoints.forEach((checkpoint, index) => {
+      const li = document.createElement("li");
+      const isDone = elapsed >= checkpoint.offsetMs;
+      const isCurrent = !isDone && index > 0 && elapsed >= checkpoints[index - 1].offsetMs;
+
+      li.textContent = checkpoint.text;
+      li.className = isDone ? "done" : isCurrent ? "current" : "pending";
+      refs.timeline.append(li);
+    });
+
+    const etaMs = Math.max(0, checkpoints[checkpoints.length - 1].offsetMs - elapsed);
+    const etaMinutes = Math.ceil(etaMs / 60000);
+    refs.trackingMeta.textContent = etaMinutes > 0 ? `ETA ${etaMinutes} min` : "Delivered";
+
+    if (etaMs <= 0 && state.trackingTimer) {
+      clearInterval(state.trackingTimer);
+      state.trackingTimer = null;
+    }
+  };
+
+  refs.trackingSection.classList.remove("hidden");
+  document.body.classList.add("tracking-only");
   refs.trackingSection.scrollIntoView({ behavior: "smooth" });
 
-  let step = 0;
   if (state.trackingTimer) clearInterval(state.trackingTimer);
-
-  state.trackingTimer = setInterval(() => {
-    const li = document.createElement("li");
-    li.textContent = `${new Date().toLocaleTimeString()} — ${checkpoints[step]}`;
-    refs.timeline.append(li);
-    step += 1;
-    if (step >= checkpoints.length) clearInterval(state.trackingTimer);
-  }, 1800);
+  renderTracking();
+  state.trackingTimer = setInterval(renderTracking, 1000);
 }
 
 refs.searchInput.addEventListener("input", renderProducts);
@@ -386,7 +412,10 @@ refs.closePayment.addEventListener("click", () => refs.paymentModal.close());
 refs.startOrder.addEventListener("click", () => {
   document.querySelector("main").scrollIntoView({ behavior: "smooth" });
 });
-refs.viewTracking.addEventListener("click", setupTracking);
+refs.viewTracking.addEventListener("click", () => {
+  if (!state.activeOrder) return;
+  setupTracking();
+});
 
 refs.themeToggle.addEventListener("click", () => {
   state.theme = state.theme === "light" ? "night" : "light";
