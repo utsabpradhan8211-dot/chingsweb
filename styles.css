@@ -131,6 +131,21 @@ textarea { resize: vertical; min-height: 80px; }
 .timeline { margin: 0; padding-left: 1rem; color: var(--muted); }
 .timeline li { margin-bottom: .55rem; }
 
+.timeline li.done { color: var(--text); font-weight: 700; }
+.timeline li.current { color: var(--accent); font-weight: 700; }
+.timeline li.pending { opacity: .55; }
+
+body.tracking-only .hero,
+body.tracking-only .controls,
+body.tracking-only main {
+  display: none;
+}
+
+body.tracking-only .tracking {
+  margin-top: 0;
+}
+
+
 @media (max-width: 980px) {
   .hero, main { grid-template-columns: 1fr; }
   .product-grid { grid-template-columns: 1fr; }
