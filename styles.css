@@ -3,8 +3,8 @@
   --card: #ffffff;
   --text: #21140f;
   --muted: #6d5d57;
-  --accent: #cf2e2e;
-  --accent-dark: #8a1f1f;
+  --accent: #fc8019;
+  --accent-dark: #df6b0f;
   --line: #ebd8d1;
   --shadow: 0 10px 30px rgba(38, 20, 20, 0.12);
 }
@@ -14,8 +14,8 @@ body.night {
   --card: #1d1b21;
   --text: #f7f2f2;
   --muted: #b2a8b0;
-  --accent: #ff5b5b;
-  --accent-dark: #ff7676;
+  --accent: #ff9a3d;
+  --accent-dark: #ffb164;
   --line: #2f2b33;
   --shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
 }

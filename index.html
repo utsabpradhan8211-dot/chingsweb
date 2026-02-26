@@ -31,10 +31,10 @@
 
       <section class="hero">
         <div class="hero-copy">
-          <h2>Fast ordering, smooth payment, and real-time tracking.</h2>
+          <h2>Swiggy-style ordering flow with real Razorpay checkout demo.</h2>
           <p>
             Browse Korean-themed menu catalog, add products to cart, and place
-            orders with a live payment simulation for business-ready demos.
+            orders with Razorpay test checkout and live delivery tracking for convincing demos.
           </p>
           <div class="hero-cta">
             <button class="solid" id="startOrder">Start Order</button>
@@ -102,26 +102,27 @@
 
     <dialog id="checkoutModal">
       <form method="dialog" class="modal-form" id="checkoutForm">
-        <h3>Checkout & Delivery Details</h3>
+        <h3>Checkout like Swiggy</h3>
         <label>Full Name<input id="name" required placeholder="Kim Min-jun" /></label>
         <label>Phone<input id="phone" required pattern="[0-9]{10}" placeholder="10-digit number" /></label>
         <label>Address<textarea id="address" required placeholder="Apartment, street, area"></textarea></label>
         <label>Payment Method
           <select id="paymentMethod" required>
-            <option value="upi">UPI</option>
-            <option value="card">Card</option>
-            <option value="wallet">Wallet</option>
+            <option value="upi">Razorpay UPI</option>
+            <option value="card">Razorpay Card</option>
+            <option value="wallet">Razorpay Wallet</option>
+            <option value="netbanking">Razorpay Netbanking</option>
           </select>
         </label>
-        <button class="solid" type="submit">Pay & Place Order</button>
+        <button class="solid" type="submit">Pay with Razorpay</button>
         <button class="ghost" type="button" id="checkoutCancel">Cancel</button>
       </form>
     </dialog>
 
     <dialog id="paymentModal">
       <div class="modal-form">
-        <h3>Real-time Payment Portal</h3>
-        <p id="paymentStatus">Initializing secure transaction...</p>
+        <h3>Razorpay Payment Status</h3>
+        <p id="paymentStatus">Preparing secure Razorpay checkout...</p>
         <div class="payment-summary" id="paymentSummary"></div>
         <div class="progress-wrap">
           <div id="paymentProgress" class="progress-bar"></div>
@@ -154,6 +155,7 @@
       </article>
     </template>
 
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
