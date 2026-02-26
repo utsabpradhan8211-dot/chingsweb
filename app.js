@@ -352,6 +352,20 @@ function setupTracking() {
   state.trackingTimer = setInterval(renderTracking, 1000);
 }
 
+function showNoOrderTrackingMessage() {
+  refs.trackingSection.classList.remove("hidden");
+  document.body.classList.remove("tracking-only");
+  refs.timeline.innerHTML = "";
+
+  const li = document.createElement("li");
+  li.className = "notice";
+  li.textContent = "No order to track right now. Please place an order first.";
+  refs.timeline.append(li);
+
+  refs.trackingMeta.textContent = "No active order";
+  refs.trackingSection.scrollIntoView({ behavior: "smooth" });
+}
+
 refs.searchInput.addEventListener("input", renderProducts);
 refs.categoryFilter.addEventListener("change", renderProducts);
 refs.clearFilters.addEventListener("click", () => {
@@ -413,7 +427,10 @@ refs.startOrder.addEventListener("click", () => {
   document.querySelector("main").scrollIntoView({ behavior: "smooth" });
 });
 refs.viewTracking.addEventListener("click", () => {
-  if (!state.activeOrder) return;
+  if (!state.activeOrder) {
+    showNoOrderTrackingMessage();
+    return;
+  }
   setupTracking();
 });
 

@@ -5,6 +5,8 @@
   --muted: #6d5d57;
   --accent: #fc8019;
   --accent-dark: #df6b0f;
+  --ghost-bg: #fff2e7;
+  --ghost-border: #f1c5a6;
   --line: #ebd8d1;
   --shadow: 0 10px 30px rgba(38, 20, 20, 0.12);
 }
@@ -16,6 +18,8 @@ body.night {
   --muted: #b2a8b0;
   --accent: #ff9a3d;
   --accent-dark: #ffb164;
+  --ghost-bg: #26222a;
+  --ghost-border: #45404b;
   --line: #2f2b33;
   --shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
 }
@@ -56,7 +60,14 @@ button, select, input, textarea {
 button { cursor: pointer; }
 button.solid { background: var(--accent); color: #fff; border-color: transparent; }
 button.solid:hover { background: var(--accent-dark); }
-button.ghost { background: transparent; color: var(--text); }
+button.ghost {
+  background: var(--ghost-bg);
+  border-color: var(--ghost-border);
+  color: var(--text);
+}
+button.ghost:hover {
+  background: color-mix(in srgb, var(--ghost-bg), var(--accent) 18%);
+}
 button.block { width: 100%; margin-top: .8rem; }
 button:disabled { opacity: .4; cursor: not-allowed; }
 
@@ -134,6 +145,11 @@ textarea { resize: vertical; min-height: 80px; }
 .timeline li.done { color: var(--text); font-weight: 700; }
 .timeline li.current { color: var(--accent); font-weight: 700; }
 .timeline li.pending { opacity: .55; }
+.timeline li.notice {
+  opacity: 1;
+  color: var(--muted);
+  font-style: italic;
+}
 
 body.tracking-only .hero,
 body.tracking-only .controls,
