@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seoul Spice Market | Consumer Ordering Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="top-bar">
+        <div class="brand">
+          <div class="brand-mark">서울</div>
+          <div>
+            <h1>Seoul Spice Market</h1>
+            <p>Korean-inspired instant food ordering experience</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="ghost" id="themeToggle">Night Hanok Mode</button>
+          <button class="solid" id="loginButton">Login / Signup</button>
+        </div>
+      </header>
+
+      <section class="hero">
+        <div class="hero-copy">
+          <span class="badge">Swiggy-like UX Demo</span>
+          <h2>Fast ordering, smooth payment, and real-time tracking.</h2>
+          <p>
+            Browse Korean-themed menu catalog, add products to cart, and place
+            orders with a live payment simulation for business-ready demos.
+          </p>
+          <div class="hero-cta">
+            <button class="solid" id="startOrder">Start Order</button>
+            <button class="ghost" id="viewTracking">Live Order Tracker</button>
+          </div>
+        </div>
+        <div class="hero-panel">
+          <p>Today’s offers</p>
+          <ul>
+            <li>🔥 20% off on combo bowls above ₹399</li>
+            <li>🚚 Free delivery in 25 minutes</li>
+            <li>🎁 Bonus kimchi sides for first order users</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="controls">
+        <input id="searchInput" type="search" placeholder="Search noodles, dumplings, sauce..." />
+        <select id="categoryFilter">
+          <option value="all">All Categories</option>
+          <option value="meals">Meals</option>
+          <option value="snacks">Snacks</option>
+          <option value="beverages">Beverages</option>
+          <option value="sauces">Sauces</option>
+        </select>
+        <button class="ghost" id="clearFilters">Clear</button>
+      </section>
+
+      <main>
+        <section>
+          <div class="section-title">
+            <h3>Menu & Products</h3>
+            <p>Curated from your existing product style and optimized for consumers.</p>
+          </div>
+          <div id="productGrid" class="product-grid"></div>
+        </section>
+
+        <aside class="cart-panel">
+          <div class="section-title">
+            <h3>Your Cart</h3>
+            <p id="cartMeta">0 items added</p>
+          </div>
+          <div id="cartItems" class="cart-items empty">No products added yet.</div>
+          <div class="bill">
+            <div><span>Subtotal</span><strong id="subtotal">₹0</strong></div>
+            <div><span>Delivery</span><strong id="delivery">₹49</strong></div>
+            <div><span>Taxes</span><strong id="taxes">₹0</strong></div>
+            <div class="total"><span>Total</span><strong id="total">₹0</strong></div>
+          </div>
+          <button id="checkoutButton" class="solid block" disabled>Proceed to Checkout</button>
+        </aside>
+      </main>
+    </div>
+
+    <dialog id="authModal">
+      <form method="dialog" class="modal-form" id="authForm">
+        <h3>Welcome Back</h3>
+        <p>Login for a faster checkout and saved addresses.</p>
+        <label>Email<input type="email" id="authEmail" required placeholder="you@example.com"/></label>
+        <label>Password<input type="password" id="authPassword" required minlength="6" /></label>
+        <button class="solid" type="submit">Continue</button>
+        <button class="ghost" value="cancel">Cancel</button>
+      </form>
+    </dialog>
+
+    <dialog id="checkoutModal">
+      <form method="dialog" class="modal-form" id="checkoutForm">
+        <h3>Checkout & Delivery Details</h3>
+        <label>Full Name<input id="name" required placeholder="Kim Min-jun" /></label>
+        <label>Phone<input id="phone" required pattern="[0-9]{10}" placeholder="10-digit number" /></label>
+        <label>Address<textarea id="address" required placeholder="Apartment, street, area"></textarea></label>
+        <label>Payment Method
+          <select id="paymentMethod" required>
+            <option value="upi">UPI</option>
+            <option value="card">Card</option>
+            <option value="wallet">Wallet</option>
+          </select>
+        </label>
+        <button class="solid" type="submit">Pay & Place Order</button>
+        <button class="ghost" value="cancel">Cancel</button>
+      </form>
+    </dialog>
+
+    <dialog id="paymentModal">
+      <div class="modal-form">
+        <h3>Real-time Payment Portal</h3>
+        <p id="paymentStatus">Initializing secure transaction...</p>
+        <div class="progress-wrap">
+          <div id="paymentProgress" class="progress-bar"></div>
+        </div>
+        <ul id="paymentLog" class="log"></ul>
+        <button class="ghost" id="closePayment" disabled>Close</button>
+      </div>
+    </dialog>
+
+    <section class="tracking" id="trackingSection">
+      <div class="section-title">
+        <h3>Live Order Tracking</h3>
+        <p>Updates every few seconds to simulate real-time delivery flow.</p>
+      </div>
+      <ol id="trackingTimeline" class="timeline"></ol>
+    </section>
+
+    <template id="productTemplate">
+      <article class="product-card">
+        <img alt="Product image" />
+        <div class="product-copy">
+          <h4></h4>
+          <p class="desc"></p>
+          <div class="meta-row">
+            <span class="category"></span>
+            <strong class="price"></strong>
+          </div>
+          <button class="solid add-btn">Add to Cart</button>
+        </div>
+      </article>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
