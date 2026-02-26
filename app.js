@@ -229,7 +229,7 @@ function openPaymentModal(orderDetails, total) {
     <p><strong>Deliver to:</strong> ${orderDetails.address}</p>
     <p><strong>Amount:</strong> ${formatINR(total)}</p>
   `;
-  appendPaymentLog("Created demo payment request.");
+  appendPaymentLog("Created payment request.");
 }
 
 function finalizeOrder(paymentId) {
@@ -264,7 +264,7 @@ function launchRazorpay(orderDetails) {
     amount: total * 100,
     currency: "INR",
     name: "Seoul Spice Market",
-    description: "Swiggy-style live checkout demo",
+    description: "Instant checkout for Seoul Spice Market orders",
     image: "https://razorpay.com/assets/razorpay-logo.svg",
     prefill: {
       name: orderDetails.name,
@@ -273,7 +273,7 @@ function launchRazorpay(orderDetails) {
     },
     notes: {
       address: orderDetails.address,
-      demo: "This is a demo storefront payment",
+      demo: "Storefront checkout payment",
     },
     theme: {
       color: "#fc8019",
@@ -287,7 +287,7 @@ function launchRazorpay(orderDetails) {
       },
     },
     handler: (response) => {
-      refs.paymentStatus.textContent = "Payment captured. Verifying with demo backend...";
+      refs.paymentStatus.textContent = "Payment captured. Verifying with backend...";
       refs.paymentProgress.style.width = "82%";
       appendPaymentLog("Razorpay returned success response.");
       setTimeout(() => finalizeOrder(response.razorpay_payment_id), 900);
