@@ -1,0 +1,10 @@
+{
+  "name": "seoul-spice-market",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static consumer demo site for Seoul Spice Market",
+  "scripts": {
+    "build": "echo 'No build step required for static site'",
+    "start": "node server.js"
+  }
+}

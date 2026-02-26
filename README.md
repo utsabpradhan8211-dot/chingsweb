@@ -18,6 +18,13 @@ python3 -m http.server 4173
 # then open http://localhost:4173
 ```
 
+## Deploy on Render
+Use a **Web Service** (Node) with:
+- Build command: `yarn build`
+- Start command: `yarn start`
+
+This repository now includes a `package.json` and lightweight Node static server (`server.js`) so Render no longer fails with missing `package.json`.
+
 ## Tech
 - HTML5
 - CSS3 (responsive)
