@@ -76,11 +76,15 @@ const refs = {
   checkoutButton: document.getElementById("checkoutButton"),
   authModal: document.getElementById("authModal"),
   authForm: document.getElementById("authForm"),
+  authCancel: document.getElementById("authCancel"),
   loginButton: document.getElementById("loginButton"),
+  logoutButton: document.getElementById("logoutButton"),
   checkoutModal: document.getElementById("checkoutModal"),
   checkoutForm: document.getElementById("checkoutForm"),
+  checkoutCancel: document.getElementById("checkoutCancel"),
   paymentModal: document.getElementById("paymentModal"),
   paymentStatus: document.getElementById("paymentStatus"),
+  paymentSummary: document.getElementById("paymentSummary"),
   paymentProgress: document.getElementById("paymentProgress"),
   paymentLog: document.getElementById("paymentLog"),
   closePayment: document.getElementById("closePayment"),
@@ -183,18 +187,46 @@ function renderCart() {
   refs.checkoutButton.disabled = false;
 }
 
+function syncAuthState() {
+  if (state.user) {
+    refs.loginButton.textContent = `Signed in: ${state.user}`;
+    refs.loginButton.classList.remove("solid");
+    refs.loginButton.classList.add("ghost");
+    refs.logoutButton.classList.remove("hidden");
+    return;
+  }
+
+  refs.loginButton.textContent = "Login / Signup";
+  refs.loginButton.classList.remove("ghost");
+  refs.loginButton.classList.add("solid");
+  refs.logoutButton.classList.add("hidden");
+}
+
 function startPaymentSimulation(orderDetails) {
+  const cartItems = [...state.cart.values()];
+  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const taxes = Math.round(subtotal * 0.05);
+  const delivery = cartItems.length ? 49 : 0;
+  const total = subtotal + taxes + delivery;
+
   refs.paymentModal.showModal();
   refs.paymentLog.innerHTML = "";
   refs.closePayment.disabled = true;
   refs.paymentProgress.style.width = "0%";
+  refs.paymentSummary.innerHTML = `
+    <p><strong>Payer:</strong> ${state.user}</p>
+    <p><strong>Method:</strong> ${orderDetails.method.toUpperCase()}</p>
+    <p><strong>Deliver to:</strong> ${orderDetails.address}</p>
+    <p><strong>Amount:</strong> ${formatINR(total)}</p>
+  `;
 
   const steps = [
+    "Opening secure payment gateway",
     "Validating order details",
     `Reserving slot for ${orderDetails.name}`,
     "Connecting to payment network",
     "Authorizing transaction",
-    "Payment successful",
+    `${orderDetails.method.toUpperCase()} payment successful`,
     "Order placed successfully",
   ];
 
@@ -264,10 +296,18 @@ refs.cartItems.addEventListener("click", (event) => {
 });
 
 refs.loginButton.addEventListener("click", () => refs.authModal.showModal());
+refs.logoutButton.addEventListener("click", () => {
+  state.user = null;
+  syncAuthState();
+});
+
+refs.authCancel.addEventListener("click", () => refs.authModal.close());
+refs.checkoutCancel.addEventListener("click", () => refs.checkoutModal.close());
+
 refs.authForm.addEventListener("submit", (event) => {
   event.preventDefault();
   state.user = document.getElementById("authEmail").value;
-  refs.loginButton.textContent = `Signed in: ${state.user}`;
+  syncAuthState();
   refs.authModal.close();
 });
 
@@ -304,3 +344,4 @@ refs.themeToggle.addEventListener("click", () => {
 
 renderProducts();
 renderCart();
+syncAuthState();

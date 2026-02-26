@@ -25,6 +25,7 @@
         <div class="header-actions">
           <button class="ghost" id="themeToggle">Night Hanok Mode</button>
           <button class="solid" id="loginButton">Login / Signup</button>
+          <button class="ghost hidden" id="logoutButton">Logout</button>
         </div>
       </header>
 
@@ -96,7 +97,7 @@
         <label>Email<input type="email" id="authEmail" required placeholder="you@example.com"/></label>
         <label>Password<input type="password" id="authPassword" required minlength="6" /></label>
         <button class="solid" type="submit">Continue</button>
-        <button class="ghost" value="cancel">Cancel</button>
+        <button class="ghost" type="button" id="authCancel">Cancel</button>
       </form>
     </dialog>
 
@@ -114,7 +115,7 @@
           </select>
         </label>
         <button class="solid" type="submit">Pay & Place Order</button>
-        <button class="ghost" value="cancel">Cancel</button>
+        <button class="ghost" type="button" id="checkoutCancel">Cancel</button>
       </form>
     </dialog>
 
@@ -122,6 +123,7 @@
       <div class="modal-form">
         <h3>Real-time Payment Portal</h3>
         <p id="paymentStatus">Initializing secure transaction...</p>
+        <div class="payment-summary" id="paymentSummary"></div>
         <div class="progress-wrap">
           <div id="paymentProgress" class="progress-bar"></div>
         </div>
