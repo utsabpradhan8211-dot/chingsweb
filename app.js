@@ -55,6 +55,8 @@ const products = [
   },
 ];
 
+const RAZORPAY_KEY = "rzp_test_1DP5mmOlF5G5ag";
+
 const state = {
   cart: new Map(),
   user: null,
@@ -103,6 +105,15 @@ function formatINR(value) {
   }).format(value);
 }
 
+function getCartTotals() {
+  const cartItems = [...state.cart.values()];
+  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const taxes = Math.round(subtotal * 0.05);
+  const delivery = cartItems.length ? 49 : 0;
+  const total = subtotal + taxes + delivery;
+  return { cartItems, subtotal, taxes, delivery, total };
+}
+
 function getFilteredProducts() {
   const query = refs.searchInput.value.trim().toLowerCase();
   const category = refs.categoryFilter.value;
@@ -147,19 +158,15 @@ function renderProducts() {
 }
 
 function renderCart() {
-  const items = [...state.cart.values()];
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
-  const taxes = Math.round(subtotal * 0.05);
-  const delivery = items.length ? 49 : 0;
-  const total = subtotal + taxes + delivery;
+  const { cartItems, subtotal, taxes, delivery, total } = getCartTotals();
 
-  refs.cartMeta.textContent = `${items.reduce((s, i) => s + i.qty, 0)} items added`;
+  refs.cartMeta.textContent = `${cartItems.reduce((s, i) => s + i.qty, 0)} items added`;
   refs.subtotal.textContent = formatINR(subtotal);
   refs.taxes.textContent = formatINR(taxes);
   refs.total.textContent = formatINR(total);
   document.getElementById("delivery").textContent = formatINR(delivery);
 
-  if (!items.length) {
+  if (!cartItems.length) {
     refs.cartItems.className = "cart-items empty";
     refs.cartItems.textContent = "No products added yet.";
     refs.checkoutButton.disabled = true;
@@ -168,7 +175,7 @@ function renderCart() {
 
   refs.cartItems.className = "cart-items";
   refs.cartItems.innerHTML = "";
-  items.forEach((item) => {
+  cartItems.forEach((item) => {
     const row = document.createElement("div");
     row.className = "cart-row";
     row.innerHTML = `
@@ -202,52 +209,96 @@ function syncAuthState() {
   refs.logoutButton.classList.add("hidden");
 }
 
-function startPaymentSimulation(orderDetails) {
-  const cartItems = [...state.cart.values()];
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.qty, 0);
-  const taxes = Math.round(subtotal * 0.05);
-  const delivery = cartItems.length ? 49 : 0;
-  const total = subtotal + taxes + delivery;
+function appendPaymentLog(message) {
+  const li = document.createElement("li");
+  li.textContent = `${new Date().toLocaleTimeString()} — ${message}`;
+  refs.paymentLog.append(li);
+}
 
+function openPaymentModal(orderDetails, total) {
   refs.paymentModal.showModal();
   refs.paymentLog.innerHTML = "";
   refs.closePayment.disabled = true;
-  refs.paymentProgress.style.width = "0%";
+  refs.paymentProgress.style.width = "18%";
+  refs.paymentStatus.textContent = "Launching Razorpay secure checkout...";
   refs.paymentSummary.innerHTML = `
     <p><strong>Payer:</strong> ${state.user}</p>
-    <p><strong>Method:</strong> ${orderDetails.method.toUpperCase()}</p>
+    <p><strong>Method:</strong> Razorpay (${orderDetails.method.toUpperCase()})</p>
     <p><strong>Deliver to:</strong> ${orderDetails.address}</p>
     <p><strong>Amount:</strong> ${formatINR(total)}</p>
   `;
+  appendPaymentLog("Created demo payment request.");
+}
 
-  const steps = [
-    "Opening secure payment gateway",
-    "Validating order details",
-    `Reserving slot for ${orderDetails.name}`,
-    "Connecting to payment network",
-    "Authorizing transaction",
-    `${orderDetails.method.toUpperCase()} payment successful`,
-    "Order placed successfully",
-  ];
+function finalizeOrder(paymentId) {
+  refs.paymentStatus.textContent = "Payment verified. Order confirmed!";
+  refs.paymentProgress.style.width = "100%";
+  appendPaymentLog(`Received payment id ${paymentId}.`);
+  appendPaymentLog("Sent confirmation to kitchen and delivery partner.");
+  refs.closePayment.disabled = false;
+  setupTracking();
+  state.cart.clear();
+  renderCart();
+}
 
-  let index = 0;
-  const timer = setInterval(() => {
-    refs.paymentStatus.textContent = steps[index];
-    refs.paymentProgress.style.width = `${((index + 1) / steps.length) * 100}%`;
+function launchRazorpay(orderDetails) {
+  if (!window.Razorpay) {
+    refs.paymentStatus.textContent = "Razorpay SDK unavailable. Check internet and retry.";
+    refs.paymentProgress.style.width = "100%";
+    appendPaymentLog("Checkout failed because Razorpay script did not load.");
+    refs.closePayment.disabled = false;
+    return;
+  }
 
-    const li = document.createElement("li");
-    li.textContent = `${new Date().toLocaleTimeString()} — ${steps[index]}`;
-    refs.paymentLog.append(li);
+  const { total } = getCartTotals();
+  openPaymentModal(orderDetails, total);
 
-    index += 1;
-    if (index >= steps.length) {
-      clearInterval(timer);
-      refs.closePayment.disabled = false;
-      setupTracking();
-      state.cart.clear();
-      renderCart();
-    }
-  }, 900);
+  const options = {
+    key: RAZORPAY_KEY,
+    amount: total * 100,
+    currency: "INR",
+    name: "Seoul Spice Market",
+    description: "Swiggy-style live checkout demo",
+    image: "https://razorpay.com/assets/razorpay-logo.svg",
+    prefill: {
+      name: orderDetails.name,
+      email: state.user,
+      contact: orderDetails.phone,
+    },
+    notes: {
+      address: orderDetails.address,
+      demo: "This is a demo storefront payment",
+    },
+    theme: {
+      color: "#fc8019",
+    },
+    modal: {
+      ondismiss: () => {
+        refs.paymentStatus.textContent = "Payment was cancelled by customer.";
+        refs.paymentProgress.style.width = "100%";
+        appendPaymentLog("Customer closed Razorpay popup before payment.");
+        refs.closePayment.disabled = false;
+      },
+    },
+    handler: (response) => {
+      refs.paymentStatus.textContent = "Payment captured. Verifying with demo backend...";
+      refs.paymentProgress.style.width = "82%";
+      appendPaymentLog("Razorpay returned success response.");
+      setTimeout(() => finalizeOrder(response.razorpay_payment_id), 900);
+    },
+  };
+
+  const razorpayInstance = new window.Razorpay(options);
+  razorpayInstance.on("payment.failed", (response) => {
+    refs.paymentStatus.textContent = "Payment failed. Try another method.";
+    refs.paymentProgress.style.width = "100%";
+    appendPaymentLog(`Failure reason: ${response.error.description}`);
+    refs.closePayment.disabled = false;
+  });
+
+  appendPaymentLog("Opening Razorpay checkout popup.");
+  refs.paymentProgress.style.width = "45%";
+  razorpayInstance.open();
 }
 
 function setupTracking() {
@@ -328,7 +379,7 @@ refs.checkoutForm.addEventListener("submit", (event) => {
     method: document.getElementById("paymentMethod").value,
   };
   refs.checkoutModal.close();
-  startPaymentSimulation(details);
+  launchRazorpay(details);
 });
 
 refs.closePayment.addEventListener("click", () => refs.paymentModal.close());
