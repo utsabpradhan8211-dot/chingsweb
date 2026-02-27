@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
-  <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#a0de57"/><stop offset="1" stop-color="#3f9f40"/></linearGradient></defs>
-  <rect width="900" height="520" fill="#f3f8ed"/>
-  <rect x="120" y="80" width="370" height="340" rx="20" fill="url(#g)"/>
-  <rect x="150" y="170" width="310" height="120" rx="20" fill="#0b7a3d"/>
-  <text x="305" y="252" text-anchor="middle" font-size="78" font-family="Arial" font-weight="700" fill="#fff">K-Start</text>
-  <text x="305" y="145" text-anchor="middle" font-size="56" font-family="Arial" fill="#231f20">Ching's</text>
-  <ellipse cx="640" cy="300" rx="180" ry="95" fill="#232323"/><ellipse cx="640" cy="300" rx="155" ry="74" fill="#f6b23b"/>
-</svg>
