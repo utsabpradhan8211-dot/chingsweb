@@ -168,6 +168,19 @@ body.night #authModal input {
   border-color: #fff;
 }
 textarea { resize: vertical; min-height: 80px; }
+
+.complaint-history {
+  margin: 0 1rem 1rem;
+  padding: .75rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--card), var(--accent) 3%);
+}
+
+.complaint-history h4 { margin: 0 0 .55rem; }
+.complaint-row { border-top: 1px dashed var(--line); padding-top: .5rem; margin-top: .5rem; }
+.complaint-row p { margin: .2rem 0; }
+.complaint-row small, .muted-copy { color: var(--muted); }
 .progress-wrap { height: 12px; background: var(--line); border-radius: 999px; overflow: hidden; }
 .progress-bar { height: 100%; width: 0; background: linear-gradient(90deg, #29c66f, #24a1ff); transition: width .4s ease; }
 .log { margin: .2rem 0 0; color: var(--muted); font-size: .92rem; padding-left: 1rem; }
