@@ -29,7 +29,7 @@ const products = [
     category: "combo",
     price: 99,
     description: "Twin packs of our moderately spicy K-Bold. 🌶️🌶️ 150g pack.",
-    image: "assets/photos/k-bold-x2.png",
+    image: "assets/photos/k-fire-cup.png",
   },
   {
     id: "k-fire-cup",
@@ -37,7 +37,7 @@ const products = [
     category: "premium-bowl",
     price: 99,
     description: "Late-night indulgence! Fiery Korean noodles. 🌶️🌶️🌶️ 90g cup.",
-    image: "assets/photos/k-fire-cup.png",
+    image: "assets/photos/k-bold-x2.png",
   },
 ];
 
