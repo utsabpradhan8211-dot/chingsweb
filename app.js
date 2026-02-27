@@ -6,7 +6,6 @@ const products = [
     price: 55,
     description: "Mild Korean garlicky goodness. 🌶️ 70g pack.",
     image: "assets/photos/k-start.png",
-    fallbackImage: "assets/photos/k-start.svg",
   },
   {
     id: "k-bold",
@@ -15,7 +14,6 @@ const products = [
     price: 75,
     description: "Moderately spicy Korean punch. 🌶️🌶️ 75g pack.",
     image: "assets/photos/k-bold.png",
-    fallbackImage: "assets/photos/k-bold.svg",
   },
   {
     id: "k-fire",
@@ -24,7 +22,6 @@ const products = [
     price: 89,
     description: "Fiery heat with Korea kick! 🌶️🌶️🌶️ 80g pack.",
     image: "assets/photos/k-fire.png",
-    fallbackImage: "assets/photos/k-fire.svg",
   },
   {
     id: "k-bold-x2",
@@ -33,7 +30,6 @@ const products = [
     price: 99,
     description: "Twin packs of our moderately spicy K-Bold. 🌶️🌶️ 150g pack.",
     image: "assets/photos/k-bold-x2.png",
-    fallbackImage: "assets/photos/k-bold-x2.svg",
   },
   {
     id: "k-fire-cup",
@@ -42,7 +38,6 @@ const products = [
     price: 99,
     description: "Late-night indulgence! Fiery Korean noodles. 🌶️🌶️🌶️ 90g cup.",
     image: "assets/photos/k-fire-cup.png",
-    fallbackImage: "assets/photos/k-fire-cup.svg",
   },
 ];
 
@@ -135,12 +130,6 @@ function renderProducts() {
     const imageEl = node.querySelector("img");
     imageEl.src = product.image;
     imageEl.alt = product.name;
-    if (product.fallbackImage) {
-      imageEl.addEventListener("error", () => {
-        if (imageEl.src.includes(product.fallbackImage)) return;
-        imageEl.src = product.fallbackImage;
-      }, { once: true });
-    }
     node.querySelector("h4").textContent = product.name;
     node.querySelector(".desc").textContent = product.description;
     node.querySelector(".category").textContent = product.category.replace(/-/g, " ");
