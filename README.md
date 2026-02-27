@@ -29,3 +29,7 @@ This repository now includes a `package.json` and lightweight Node static server
 - HTML5
 - CSS3 (responsive)
 - Vanilla JavaScript
+
+## Product photos
+- The storefront now looks first for real product photos at `assets/photos/*.png` for the 5 SKUs (`k-start`, `k-bold`, `k-fire`, `k-bold-x2`, `k-fire-cup`).
+- If a PNG is missing, it automatically falls back to the existing SVG in the same folder.
