@@ -1,57 +1,48 @@
 const products = [
   {
-    id: "ramen",
-    name: "Korean Fire Ramen Bowl",
-    category: "meals",
-    price: 229,
-    description: "Spicy instant ramen with gochujang broth, scallions, and sesame.",
+    id: "k-start",
+    name: "K-Start",
+    category: "entry",
+    price: 55,
+    description: "Mild Korean garlicky goodness. Mild heat • 70g pack.",
     image:
-      "https://images.unsplash.com/photo-1617093727343-374698b1b08d?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1617622141573-55b780b9d07d?auto=format&fit=crop&w=900&q=80",
   },
   {
-    id: "tteokbokki",
-    name: "Cheesy Tteokbokki Cups",
-    category: "snacks",
-    price: 199,
-    description: "Rice cakes in sweet-spicy sauce, melted cheese top-up.",
+    id: "k-bold",
+    name: "K-Bold",
+    category: "core-engine",
+    price: 75,
+    description: "Moderately spicy Korean punch. Medium heat • 75g pack.",
     image:
-      "https://images.unsplash.com/photo-1583225157630-2f8e9f5bc95a?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1634864572865-1c7f4f8f91a4?auto=format&fit=crop&w=900&q=80",
   },
   {
-    id: "bibimbap",
-    name: "Bibimbap Ready Meal",
-    category: "meals",
-    price: 259,
-    description: "Rice bowl with veggies, sesame oil, and signature chili paste.",
+    id: "k-fire",
+    name: "K-Fire",
+    category: "core-engine",
+    price: 89,
+    description: "Fiery heat with Korean kick! Hot heat • 80g pack.",
     image:
-      "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1607560437444-8c3d4ff4f95f?auto=format&fit=crop&w=900&q=80",
   },
   {
-    id: "kimbap",
-    name: "Classic Kimbap Rolls",
-    category: "snacks",
-    price: 149,
-    description: "Seaweed rice rolls with pickled radish and crunchy veggies.",
-    image:
-      "https://images.unsplash.com/photo-1610917040803-1fccf9623064?auto=format&fit=crop&w=900&q=80",
-  },
-  {
-    id: "kimchi",
-    name: "Premium Kimchi Jar",
-    category: "sauces",
-    price: 189,
-    description: "Fermented napa cabbage crafted with Korean chili blend.",
-    image:
-      "https://images.unsplash.com/photo-1648919104126-1f69d0b94d55?auto=format&fit=crop&w=900&q=80",
-  },
-  {
-    id: "soju",
-    name: "Sparkling Yuzu Cooler",
-    category: "beverages",
+    id: "k-bold-x2",
+    name: "K-Bold x2",
+    category: "combo",
     price: 99,
-    description: "Korean-style citrus fizz drink, lightly sweet and refreshing.",
+    description: "Twin packs of our moderately spicy K-Bold! Medium heat • 150g pack.",
     image:
-      "https://images.unsplash.com/photo-1546171753-97d7676e4602?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    id: "k-fire-cup",
+    name: "K-Fire Cup",
+    category: "premium-bowl",
+    price: 99,
+    description: "Late-night indulgence! Fiery Korean noodles. Hot heat • 90g cup.",
+    image:
+      "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?auto=format&fit=crop&w=900&q=80",
   },
 ];
 
