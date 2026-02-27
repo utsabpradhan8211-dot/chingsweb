@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
+  <rect width="900" height="520" fill="#eef4ff"/>
+  <rect x="85" y="120" width="270" height="260" rx="18" fill="#367de1"/>
+  <rect x="300" y="100" width="290" height="290" rx="18" fill="#1e63c3"/>
+  <text x="220" y="250" text-anchor="middle" font-size="54" font-family="Arial" font-weight="700" fill="#fff">K-Bold</text>
+  <text x="445" y="255" text-anchor="middle" font-size="60" font-family="Arial" font-weight="700" fill="#fff">K-Bold</text>
+  <ellipse cx="670" cy="300" rx="190" ry="98" fill="#202020"/><ellipse cx="670" cy="300" rx="162" ry="74" fill="#f5aa38"/>
+</svg>

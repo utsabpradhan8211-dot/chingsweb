@@ -4,45 +4,40 @@ const products = [
     name: "K-Start",
     category: "entry",
     price: 55,
-    description: "Mild Korean garlicky goodness. Mild heat • 70g pack.",
-    image:
-      "https://images.unsplash.com/photo-1617622141573-55b780b9d07d?auto=format&fit=crop&w=900&q=80",
+    description: "Mild Korean garlicky goodness. 🌶️ 70g pack.",
+    image: "assets/k-start.svg",
   },
   {
     id: "k-bold",
     name: "K-Bold",
     category: "core-engine",
     price: 75,
-    description: "Moderately spicy Korean punch. Medium heat • 75g pack.",
-    image:
-      "https://images.unsplash.com/photo-1634864572865-1c7f4f8f91a4?auto=format&fit=crop&w=900&q=80",
+    description: "Moderately spicy Korean punch. 🌶️🌶️ 75g pack.",
+    image: "assets/k-bold.svg",
   },
   {
     id: "k-fire",
     name: "K-Fire",
     category: "core-engine",
     price: 89,
-    description: "Fiery heat with Korean kick! Hot heat • 80g pack.",
-    image:
-      "https://images.unsplash.com/photo-1607560437444-8c3d4ff4f95f?auto=format&fit=crop&w=900&q=80",
+    description: "Fiery heat with Korea kick! 🌶️🌶️🌶️ 80g pack.",
+    image: "assets/k-fire.svg",
   },
   {
     id: "k-bold-x2",
     name: "K-Bold x2",
     category: "combo",
     price: 99,
-    description: "Twin packs of our moderately spicy K-Bold! Medium heat • 150g pack.",
-    image:
-      "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=900&q=80",
+    description: "Twin packs of our moderately spicy K-Bold. 🌶️🌶️ 150g pack.",
+    image: "assets/k-bold-x2.svg",
   },
   {
     id: "k-fire-cup",
     name: "K-Fire Cup",
     category: "premium-bowl",
     price: 99,
-    description: "Late-night indulgence! Fiery Korean noodles. Hot heat • 90g cup.",
-    image:
-      "https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?auto=format&fit=crop&w=900&q=80",
+    description: "Late-night indulgence! Fiery Korean noodles. 🌶️🌶️🌶️ 90g cup.",
+    image: "assets/k-fire-cup.svg",
   },
 ];
 
@@ -136,7 +131,7 @@ function renderProducts() {
     node.querySelector("img").alt = product.name;
     node.querySelector("h4").textContent = product.name;
     node.querySelector(".desc").textContent = product.description;
-    node.querySelector(".category").textContent = product.category;
+    node.querySelector(".category").textContent = product.category.replace(/-/g, " ");
     node.querySelector(".price").textContent = formatINR(product.price);
 
     card.querySelector(".add-btn").addEventListener("click", () => {
