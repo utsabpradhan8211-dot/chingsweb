@@ -49,6 +49,8 @@ const state = {
   trackingTimer: null,
   theme: "light",
   activeOrder: null,
+  lastOrderItems: [],
+  complaints: [],
 };
 
 const refs = {
@@ -83,6 +85,12 @@ const refs = {
   trackingSection: document.getElementById("trackingSection"),
   trackingMeta: document.getElementById("trackingMeta"),
   themeToggle: document.getElementById("themeToggle"),
+  complaintButton: document.getElementById("complaintButton"),
+  complaintModal: document.getElementById("complaintModal"),
+  complaintForm: document.getElementById("complaintForm"),
+  complaintCancel: document.getElementById("complaintCancel"),
+  complaintHistory: document.getElementById("complaintHistory"),
+  reorderButton: document.getElementById("reorderButton"),
 };
 
 function formatINR(value) {
@@ -189,6 +197,7 @@ function syncAuthState() {
     refs.loginButton.classList.remove("solid");
     refs.loginButton.classList.add("ghost");
     refs.logoutButton.classList.remove("hidden");
+    refs.complaintButton.disabled = false;
     return;
   }
 
@@ -196,6 +205,38 @@ function syncAuthState() {
   refs.loginButton.classList.remove("ghost");
   refs.loginButton.classList.add("solid");
   refs.logoutButton.classList.add("hidden");
+  refs.complaintButton.disabled = true;
+  if (refs.complaintModal.open) refs.complaintModal.close();
+}
+
+function renderComplaintHistory() {
+  if (!state.user) {
+    refs.complaintHistory.innerHTML = "";
+    return;
+  }
+
+  const complaintsForUser = state.complaints.filter((item) => item.user === state.user);
+  if (!complaintsForUser.length) {
+    refs.complaintHistory.innerHTML = "<p class='muted-copy'>No complaints submitted yet.</p>";
+    return;
+  }
+
+  refs.complaintHistory.innerHTML = `
+    <h4>Recent Tickets</h4>
+    ${complaintsForUser
+      .slice(-3)
+      .reverse()
+      .map(
+        (item) => `
+          <article class="complaint-row">
+            <p><strong>${item.ticketId}</strong> • ${item.category}</p>
+            <p>${item.message}</p>
+            <small>${item.orderId ? `Order ${item.orderId} • ` : ""}status: ${item.status}</small>
+          </article>
+        `
+      )
+      .join("")}
+  `;
 }
 
 function appendPaymentLog(message) {
@@ -229,6 +270,8 @@ function finalizeOrder(paymentId) {
     id: `ORD-${Math.floor(Math.random() * 90000 + 10000)}`,
     placedAt: Date.now(),
   };
+  state.lastOrderItems = [...getCartTotals().cartItems].map((item) => ({ ...item }));
+  refs.reorderButton.disabled = state.lastOrderItems.length === 0;
   setupTracking();
   state.cart.clear();
   renderCart();
@@ -381,8 +424,9 @@ refs.logoutButton.addEventListener("click", () => {
 
 refs.authCancel.addEventListener("click", () => refs.authModal.close());
 refs.checkoutCancel.addEventListener("click", () => refs.checkoutModal.close());
+refs.complaintCancel.addEventListener("click", () => refs.complaintModal.close());
 
-[refs.authModal, refs.checkoutModal, refs.paymentModal].forEach((modal) => {
+[refs.authModal, refs.checkoutModal, refs.paymentModal, refs.complaintModal].forEach((modal) => {
   modal.addEventListener("click", (event) => {
     if (event.target === modal) {
       modal.close();
@@ -394,7 +438,36 @@ refs.authForm.addEventListener("submit", (event) => {
   event.preventDefault();
   state.user = document.getElementById("authEmail").value;
   syncAuthState();
+  renderComplaintHistory();
   refs.authModal.close();
+});
+
+refs.complaintButton.addEventListener("click", () => {
+  if (!state.user) {
+    refs.authModal.showModal();
+    return;
+  }
+  renderComplaintHistory();
+  refs.complaintModal.showModal();
+});
+
+refs.complaintForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const orderId = document.getElementById("complaintOrderId").value.trim();
+  const category = document.getElementById("complaintCategory").value;
+  const message = document.getElementById("complaintMessage").value.trim();
+
+  state.complaints.push({
+    ticketId: `CMP-${Math.floor(Math.random() * 90000 + 10000)}`,
+    orderId: orderId || null,
+    category,
+    message,
+    status: "received",
+    user: state.user,
+  });
+
+  refs.complaintForm.reset();
+  renderComplaintHistory();
 });
 
 refs.checkoutButton.addEventListener("click", () => {
@@ -418,6 +491,13 @@ refs.checkoutForm.addEventListener("submit", (event) => {
 });
 
 refs.closePayment.addEventListener("click", () => refs.paymentModal.close());
+refs.reorderButton.addEventListener("click", () => {
+  if (!state.lastOrderItems.length) return;
+  state.lastOrderItems.forEach((item) => {
+    state.cart.set(item.id, { ...item });
+  });
+  renderCart();
+});
 refs.startOrder.addEventListener("click", () => {
   document.querySelector("main").scrollIntoView({ behavior: "smooth" });
 });

@@ -24,6 +24,7 @@
         </div>
         <div class="header-actions">
           <button class="ghost" id="themeToggle">Night Hanok Mode</button>
+          <button class="ghost" id="complaintButton">Complaint Portal</button>
           <button class="solid" id="loginButton">Login / Signup</button>
           <button class="ghost hidden" id="logoutButton">Logout</button>
         </div>
@@ -91,6 +92,7 @@
             <div class="total"><span>Total</span><strong id="total">₹0</strong></div>
           </div>
           <button id="checkoutButton" class="solid block" disabled>Proceed to Checkout</button>
+          <button id="reorderButton" class="ghost block" disabled>Reorder Last Meal</button>
         </aside>
       </main>
     </div>
@@ -136,6 +138,31 @@
         <ul id="paymentLog" class="log"></ul>
         <button class="ghost" id="closePayment" disabled>Close</button>
       </div>
+    </dialog>
+
+    <dialog id="complaintModal">
+      <form method="dialog" class="modal-form" id="complaintForm">
+        <h3>Customer Complaint Portal</h3>
+        <p>Raise delivery, food quality, or payment complaints for quick support.</p>
+        <label>Order ID (if available)
+          <input id="complaintOrderId" placeholder="ORD-12345" />
+        </label>
+        <label>Complaint Category
+          <select id="complaintCategory" required>
+            <option value="delivery-delay">Delivery Delay</option>
+            <option value="wrong-item">Wrong or Missing Item</option>
+            <option value="food-quality">Food Quality</option>
+            <option value="payment">Payment Issue</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+        <label>Describe the issue
+          <textarea id="complaintMessage" required minlength="10" placeholder="Tell us what went wrong and how we can help."></textarea>
+        </label>
+        <button class="solid" type="submit">Submit Complaint</button>
+        <button class="ghost" type="button" id="complaintCancel">Cancel</button>
+      </form>
+      <div class="complaint-history" id="complaintHistory"></div>
     </dialog>
 
     <section class="tracking hidden" id="trackingSection">
